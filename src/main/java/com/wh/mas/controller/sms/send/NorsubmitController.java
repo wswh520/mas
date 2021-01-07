@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,9 +34,11 @@ public class NorsubmitController extends HttpServlet {
     private static String ecName = "东华工程科技股份有限公司";//企业名称
     private static String apId = "hdkjdx";//接口账号用户名
 
-    @RequestMapping("norsubmit")
+    @RequestMapping(value = "norsubmit",produces="text/html;charset=UTF-8;")
     public void doDeal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
         //收信手机号码。英文逗号分隔，每批次限5000个号码，例：“13800138000,13800138001,13800138002”。
         String mobiles = request.getParameter("mobiles");
         String content = request.getParameter("content");//短信内容
