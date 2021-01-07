@@ -1,0 +1,50 @@
+server:
+  port: 8080
+#  servlet:
+#    #加项目名访问
+#    context-path: /wanghui
+spring:
+  application:
+    name: mas-service
+  resources:
+    static-locations: classpath:/static/
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8&useUnicode=true&useSSL=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://47.111.251.239:3306/mas?characterEncoding=utf8&useUnicode=true&useSSL=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    #password: wanghui123
+    password: root
+    initialSize: 50
+    minIdle: 10
+    maxActive: 50
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    hikari:
+      maximum-pool-size: 300
+      idle-timeout: 0
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password:
+      timeout: 100000
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: -1
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.wh.mas
+

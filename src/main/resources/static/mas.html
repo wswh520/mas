@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>短信页面</title>
+</head>
+<body>
+<div>发送普通短信</div>
+<form action="/sms/norsubmit" method="post" id="frm1">
+    收信手机号码：<input type="input" value="" name="mobiles" />
+    短信内容：<input type="input" value="" name="content" />
+    <input type="submit" value="提交" onclick="click()">
+</form>
+<script language="javascript">
+    function click() {
+        document.getElementById("frm1").submit();
+    }
+</script>
+</body>
+</html>
