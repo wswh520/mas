@@ -1,17 +1,13 @@
 package com.wh.mas.util;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wh.mas.model.Result;
+import com.wh.mas.model.SendRes;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class JsonUtil {
 
-    public static Result getResult(String jsonData) {
-        Result result = null;
+    public static SendRes getResult(String jsonData) {
+        SendRes sendRes = null;
         // 响应成功，例：
         //{"msgGroup":"0927152506001000833076","rspcod":"success","success":true}
         //响应失败，例：
@@ -21,16 +17,16 @@ public class JsonUtil {
             String msgGroup = jsonObject.getString("msgGroup");
             String rspcod = jsonObject.getString("rspcod");
             if(StringUtils.isNotBlank(msgGroup) &&StringUtils.isNotBlank(rspcod)){
-                result = new Result();
+                sendRes = new SendRes();
                 Boolean success = jsonObject.getBoolean("success");
-                result.setMsgGroup(msgGroup);
-                result.setRspcod(rspcod);
-                result.setSuccess(success);
+                sendRes.setMsgGroup(msgGroup);
+                sendRes.setRspcod(rspcod);
+                sendRes.setSuccess(success);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return sendRes;
     }
 
     public static void main(String[] args) {

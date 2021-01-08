@@ -4,7 +4,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 
 @Data
-public class Result {
+public class SendRes {
 
     private String msgGroup;
     private String rspcod;

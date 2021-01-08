@@ -20,7 +20,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
@@ -28,41 +33,68 @@ import java.util.Map;
 public class TransSubmit {
     
     //如果关注性能问题可以考虑使用HttpClientConnectionManager
-    public String doPost(String params,String url) throws ClientProtocolException, IOException {
-        String result = null;
-//        List<NameValuePair> nvps = HttpClientHandler.buildNameValuePair(params);
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-//        EntityBuilder builder = EntityBuilder.create();
+    public String doPost(String param,String url) throws ClientProtocolException, IOException {
+        OutputStreamWriter out = null;
+        BufferedReader in = null;
+        String result = "";
         try {
-            HttpPost httpPost = new HttpPost(url);
-//            builder.setParameters(params);
-            StringEntity postingString = new StringEntity(params,"utf-8");
-            httpPost.setEntity(postingString);
-            CloseableHttpResponse response = httpclient.execute(httpPost);//传给汇付
-
-            //解析接收
-            try {
-                HttpEntity entity = response.getEntity();
-                if (response.getStatusLine().getReasonPhrase().equals("OK")
-                    && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    result = EntityUtils.toString(entity, "UTF-8");
-                    log.info("result:{}",result);
-//                    result = result.replace("action=\"", "action=\""+PropertiesUtil.getValue("hf_url"));
-//                    String oldChar = params.get("UsrName");
-//                    if(!oldChar.isEmpty()){
-//                    	// 若为中文，请用Base64解码
-//                        String newChar = "<span class=\"form-text\">"+SignUtils.getBase64Decode(oldChar)+"</span>";
-//                        result = result.replace("<span class=\"form-text\">"+oldChar+"</span>", newChar);
-//                    }
-                }
-                EntityUtils.consume(entity);
-            } finally {
-                response.close();
+            URL realUrl = new URL(url);
+            URLConnection conn = realUrl.openConnection();
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("contentType","utf-8");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            out = new OutputStreamWriter(conn.getOutputStream());
+            out.write(param);
+            out.flush();
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += "\n" + line;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            httpclient.close();
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+        log.info("result:{}",result);
         return result;
+//        String result = null;
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//        try {
+//            HttpPost httpPost = new HttpPost(url);
+//            StringEntity postingString = new StringEntity(params,"utf-8");
+//            httpPost.setEntity(postingString);
+//            CloseableHttpResponse response = httpclient.execute(httpPost);//传给汇付
+//
+//            //解析接收
+//            try {
+//                HttpEntity entity = response.getEntity();
+//                if (response.getStatusLine().getReasonPhrase().equals("OK")
+//                    && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//                    result = EntityUtils.toString(entity, "UTF-8");
+//                    log.info("result:{}",result);
+//                }
+//                EntityUtils.consume(entity);
+//            } finally {
+//                response.close();
+//            }
+//        } finally {
+//            httpclient.close();
+//        }
+//        return result;
     }
 
     /**
