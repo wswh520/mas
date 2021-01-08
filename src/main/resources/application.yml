@@ -47,4 +47,5 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: com.wh.mas
-
+logging:
+  config: classpath:logback.xml

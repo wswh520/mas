@@ -7,6 +7,7 @@
  */
 package com.wh.mas.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -22,19 +24,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
+@Slf4j
 public class TransSubmit {
     
     //如果关注性能问题可以考虑使用HttpClientConnectionManager
-    public String doPost(Map<String, String> params,String url) throws ClientProtocolException, IOException {
+    public String doPost(String params,String url) throws ClientProtocolException, IOException {
         String result = null;
-        List<NameValuePair> nvps = HttpClientHandler.buildNameValuePair(params);
+//        List<NameValuePair> nvps = HttpClientHandler.buildNameValuePair(params);
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        EntityBuilder builder = EntityBuilder.create();
+//        EntityBuilder builder = EntityBuilder.create();
         try {
             HttpPost httpPost = new HttpPost(url);
-            builder.setParameters(nvps);
-            httpPost.setEntity(builder.build());
+//            builder.setParameters(params);
+            StringEntity postingString = new StringEntity(params,"utf-8");
+            httpPost.setEntity(postingString);
             CloseableHttpResponse response = httpclient.execute(httpPost);//传给汇付
 
             //解析接收
@@ -43,6 +46,7 @@ public class TransSubmit {
                 if (response.getStatusLine().getReasonPhrase().equals("OK")
                     && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                     result = EntityUtils.toString(entity, "UTF-8");
+                    log.info("result:{}",result);
 //                    result = result.replace("action=\"", "action=\""+PropertiesUtil.getValue("hf_url"));
 //                    String oldChar = params.get("UsrName");
 //                    if(!oldChar.isEmpty()){
