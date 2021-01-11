@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 
 /**
@@ -57,9 +58,10 @@ public class NorsubmitController extends HttpServlet {
 
         String mobiles = request.getParameter("mobiles");
         String content = request.getParameter("content");//短信内容
+        String addSerial = request.getParameter("addSerial");
 
-        String addSerial = getAddSerial("");
-        if(StringUtils.isNotBlank(mobiles) && StringUtils.isNotBlank(content)) {
+        if(checkNorsubmit(mobiles,content,addSerial)) {
+            mobiles = mobiles.replaceAll("，",",");
             TransSubmit ts = new TransSubmit();
             String params = getParams(mobiles,content,addSerial);
             // 保存发送信息
@@ -78,6 +80,19 @@ public class NorsubmitController extends HttpServlet {
             log.info("手机号码或短信内容为空");
             response.getWriter().print("手机号码或短信内容为空");
         }
+    }
+
+    public boolean checkNorsubmit(String mobiles,String content,String addSerial){
+        if(StringUtils.isNotBlank(mobiles) && StringUtils.isNotBlank(content)
+                && StringUtils.isNotBlank(addSerial) && addSerial.length() == 5) {
+            Pattern pattern = Pattern.compile("[0-9]*");
+            if(pattern.matcher(addSerial).matches()){// 是数字
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

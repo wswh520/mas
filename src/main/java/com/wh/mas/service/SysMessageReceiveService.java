@@ -22,7 +22,8 @@ public class SysMessageReceiveService {
         sysMessageReceive.setContent(msgCallbackBean.getSmsContent());
         sysMessageReceive.setReceiveTime(dateFormat(msgCallbackBean.getSendTime()));
         sysMessageReceive.setTelephone(msgCallbackBean.getMobile());
-        sysMessageReceive.setExNumber(msgCallbackBean.getAddSerial());
+        String exNumber = msgCallbackBean.getAddSerial();
+        sysMessageReceive.setExNumber(exNumber.substring(exNumber.length() - 5));
         return sysMessageReceiveMapper.saveSysMessageReceive(sysMessageReceive);
     }
     public Date dateFormat(String str) {
@@ -35,5 +36,10 @@ public class SysMessageReceiveService {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static void main(String[] args) {
+        String str = "106931014045769888";
+        System.out.println(str.substring(str.length() - 3));
     }
 }
