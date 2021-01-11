@@ -9,4 +9,6 @@ public interface SysMessageTelephoneMapper extends MasMapper<SysMessageTelephone
 
     public void saveSysMessageTelephone(String telephone,Integer result,Integer messageid,String errormsg);
 
+    public SysMessageTelephone findSysMessageTelephoneByErrormsg(String errormsg);
+
 }

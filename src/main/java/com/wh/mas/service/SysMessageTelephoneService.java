@@ -2,6 +2,7 @@ package com.wh.mas.service;
 
 import com.wh.mas.dao.SysMessageTelephoneMapper;
 import com.wh.mas.model.SendRes;
+import com.wh.mas.model.SysMessageTelephone;
 import com.wh.mas.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class SysMessageTelephoneService {
         sysMessageTelephoneMapper.saveSysMessageTelephone(telephone,re,messageid,errormsg);
     }
 
-    public static void main(String[] args) {
-
+    public SysMessageTelephone findSysMessageTelephoneByErrormsg(String errormsg){
+        return sysMessageTelephoneMapper.findSysMessageTelephoneByErrormsg(errormsg);
     }
 
 

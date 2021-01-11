@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>发送普通短信</div>
-<form action="/sms/norsubmit" method="post" id="frm1">
+<form action="/sms/norsubmitSms" method="post" id="frm1">
     收信手机号码：<input type="input" value="" name="mobiles" />
     英文逗号分隔，每批次限5000个号码，例：“13800138000,13800138001,13800138002”。
     </br>
@@ -14,6 +14,7 @@
     </br>
     <input type="submit" value="提交" onclick="click()">
 </form>
+<br>
 <script language="javascript">
     function click() {
         document.getElementById("frm1").submit();

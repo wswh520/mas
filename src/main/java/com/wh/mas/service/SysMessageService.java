@@ -26,4 +26,5 @@ public class SysMessageService {
         log.info("SysMessageId:{}",id);
         return id;
     }
+
 }

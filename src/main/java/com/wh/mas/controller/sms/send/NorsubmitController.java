@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.wh.mas.dao.SysMessageMapper;
 import com.wh.mas.model.SendRes;
 import com.wh.mas.model.Submit;
+import com.wh.mas.service.SysMessageLogService;
 import com.wh.mas.service.SysMessageService;
 import com.wh.mas.service.SysMessageTelephoneService;
 import com.wh.mas.util.MD5Util;
@@ -39,14 +40,17 @@ public class NorsubmitController extends HttpServlet {
     private SysMessageService sysMessageService;
     @Autowired
     private SysMessageTelephoneService sysMessageTelephoneService;
+    @Autowired
+    private SysMessageLogService sysMessageLogService;
 
-    private static String sign = "wHwvfNuH5";//签名编码。在云MAS平台『管理』→『接口管理』→『短信接入用户管理』获取。
-    private static String secretKey = "Hd@202001";//用户密码
+//    private static String sign = "wHwvfNuH5";//签名编码。在云MAS平台『管理』→『接口管理』→『短信接入用户管理』获取。
+    private static String sign = "gecFQ4Ku3";//签名编码。在云MAS平台『管理』→『接口管理』→『短信接入用户管理』获取。
+    private static String secretKey = "Hd@202101";//用户密码
     private static String ecName = "东华工程科技股份有限公司";//企业名称
     private static String apId = "hdkjdx";//接口账号用户名
 
-    @RequestMapping(value = "norsubmit",produces="text/html;charset=UTF-8;")
-    public void doDeal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(value = "norsubmitSms",produces="text/html;charset=UTF-8;")
+    public void norsubmit(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
 
@@ -60,10 +64,12 @@ public class NorsubmitController extends HttpServlet {
             // 保存发送信息
             Integer id = sysMessageService.insertSysMessage(content,apId,addSerial);
 
-            String result = ts.doPost(params,"http://112.35.1.155:1992/sms/norsubmit");
-//            String result = "{\"msgGroup\":\"\",\"rspcod\":\"InvalidUsrOrPwd\",\"success\":false}";;
+            String result = ts.doPost("http://112.35.1.155:1992/sms/norsubmit",params,"");
+//            String result = "{\"msgGroup\":\"0111153355000000445512\",\"rspcod\":\"success\",\"success\":true}";;
             // 保存反馈信息
             sysMessageTelephoneService.saveSysMessageTelePhone(mobiles,id,result);
+            // 保存日志信息
+            sysMessageLogService.insertSysMessageLog("发送普通短信同步反馈",result);
 
             log.info("回调结果result================="+result);
             response.getWriter().print(result);

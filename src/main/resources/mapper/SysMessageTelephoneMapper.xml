@@ -7,4 +7,8 @@
         values (#{telephone}, #{messageid}, #{result},#{errormsg})
     </insert>
 
+    <select id="findSysMessageTelephoneByErrormsg" resultType="com.wh.mas.model.SysMessageTelephone">
+        SELECT * from sys_message_telephone where errormsg like concat('%',#{errormsg},'%')
+    </select>
+
 </mapper>
