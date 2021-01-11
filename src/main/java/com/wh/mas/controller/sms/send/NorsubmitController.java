@@ -56,19 +56,17 @@ public class NorsubmitController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
 
-        String mobiles = request.getParameter("mobiles");
+        String mobiles = request.getParameter("mobiles");//手机号码
         String content = request.getParameter("content");//短信内容
-        String addSerial = request.getParameter("addSerial");
+        String addSerial = request.getParameter("addSerial");//拓展码
 
-        if(checkNorsubmit(mobiles,content,addSerial)) {
+        if(checkNorsubmit(mobiles,content,addSerial,response)) {
             mobiles = mobiles.replaceAll("，",",");
             TransSubmit ts = new TransSubmit();
             String params = getParams(mobiles,content,addSerial);
             // 保存发送信息
             Integer id = sysMessageService.insertSysMessage(content,apId,addSerial);
-
             String result = ts.doPost("http://112.35.1.155:1992/sms/norsubmit",params,"");
-//            String result = "{\"msgGroup\":\"0111153355000000445512\",\"rspcod\":\"success\",\"success\":true}";;
             // 保存反馈信息
             sysMessageTelephoneService.saveSysMessageTelePhone(mobiles,id,result);
             // 保存日志信息
@@ -76,23 +74,28 @@ public class NorsubmitController extends HttpServlet {
 
             log.info("回调结果result================="+result);
             response.getWriter().print(result);
-        }else{
-            log.info("手机号码或短信内容为空");
-            response.getWriter().print("手机号码或短信内容为空");
         }
     }
 
-    public boolean checkNorsubmit(String mobiles,String content,String addSerial){
+    public boolean checkNorsubmit(String mobiles,String content,String addSerial, HttpServletResponse response) throws IOException {
         if(StringUtils.isNotBlank(mobiles) && StringUtils.isNotBlank(content)
-                && StringUtils.isNotBlank(addSerial) && addSerial.length() == 5) {
+                && StringUtils.isNotBlank(addSerial)) {
             Pattern pattern = Pattern.compile("[0-9]*");
             if(pattern.matcher(addSerial).matches()){// 是数字
-                return true;
+                if(addSerial.length() == 5){
+                    return true;
+                }else{
+                    response.getWriter().print("拓展码应是5位数字");
+                    return false;
+                }
             }else{
+                response.getWriter().print("拓展码应是5位数字");
                 return false;
             }
+        }else{
+            response.getWriter().print("参数为空");
+            return false;
         }
-        return false;
     }
 
     /**
