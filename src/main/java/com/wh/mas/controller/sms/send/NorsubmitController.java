@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -57,7 +58,7 @@ public class NorsubmitController extends HttpServlet {
         String mobiles = request.getParameter("mobiles");
         String content = request.getParameter("content");//短信内容
 
-        String addSerial = "";
+        String addSerial = getAddSerial("");
         if(StringUtils.isNotBlank(mobiles) && StringUtils.isNotBlank(content)) {
             TransSubmit ts = new TransSubmit();
             String params = getParams(mobiles,content,addSerial);
@@ -77,6 +78,19 @@ public class NorsubmitController extends HttpServlet {
             log.info("手机号码或短信内容为空");
             response.getWriter().print("手机号码或短信内容为空");
         }
+    }
+
+    /**
+     * 生成随机数
+     * @param s
+     * @return
+     */
+    public String getAddSerial(String s) {
+        while (s.length() < 20) {
+            s += (int) (Math.random() * 10);
+        }
+        log.info("随机数addSerial：{}",s);
+        return s;
     }
 
 

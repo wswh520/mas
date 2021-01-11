@@ -21,6 +21,8 @@ public class SysMessageReceiveService {
         // content, receiveTime, telephone,exNumber
         sysMessageReceive.setContent(msgCallbackBean.getSmsContent());
         sysMessageReceive.setReceiveTime(dateFormat(msgCallbackBean.getSendTime()));
+        sysMessageReceive.setTelephone(msgCallbackBean.getMobile());
+        sysMessageReceive.setExNumber(msgCallbackBean.getAddSerial());
         return sysMessageReceiveMapper.saveSysMessageReceive(sysMessageReceive);
     }
     public Date dateFormat(String str) {

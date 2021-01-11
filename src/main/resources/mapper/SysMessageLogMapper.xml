@@ -4,7 +4,7 @@
 
     <insert id="insertSysMessageLog" parameterType="com.wh.mas.model.SysMessageLog" useGeneratedKeys="true" keyProperty="id">
         insert into sys_message_log (type,content)
-        values (#{type}, N#{content})
+        values (#{type}, #{content})
     </insert>
 
 </mapper>

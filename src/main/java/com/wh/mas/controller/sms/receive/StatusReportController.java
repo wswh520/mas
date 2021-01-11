@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.SimpleFormatter;
 
 @RestController
@@ -49,7 +51,7 @@ public class StatusReportController extends HttpServlet {
      * 上行短信
      * MsgCallbackBean{mobile='15705692776', smsContent='d', sendTime='2021-01-11 15:58:36', addSerial='106575297722'}
      */
-    @RequestMapping(value = "visitCallback",produces="text/html;charset=UTF-8;")
+    @RequestMapping(value = "visitCallback")
     public void visitCallback(@RequestBody MsgCallbackBean msgCallbackBean) {
         log.info("接收到上行短信");
         log.info(msgCallbackBean.toString());
