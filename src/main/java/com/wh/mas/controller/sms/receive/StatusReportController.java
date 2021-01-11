@@ -42,9 +42,10 @@ public class StatusReportController extends HttpServlet {
     @RequestMapping(value = "statusReport",produces="text/html;charset=UTF-8;")
         public void statusReport(@RequestBody MasStatusBean masStatusBean) throws Exception {
         log.info("接收到短信报告");
-        log.info(masStatusBean.toString());
+        String statusReport = JSON.toJSONString(masStatusBean);
+        log.info(statusReport);
         // 保存日志信息
-        sysMessageLogService.insertSysMessageLog("发送普通短信异步反馈",masStatusBean.toString());
+        sysMessageLogService.insertSysMessageLog("发送普通短信异步反馈",statusReport);
     }
 
     /**
@@ -54,10 +55,11 @@ public class StatusReportController extends HttpServlet {
     @RequestMapping(value = "visitCallback")
     public void visitCallback(@RequestBody MsgCallbackBean msgCallbackBean) {
         log.info("接收到上行短信");
-        log.info(msgCallbackBean.toString());
+        String visiCallbac = JSON.toJSONString(msgCallbackBean);
+        log.info(visiCallbac);
         //存入数据库
         sysMessageReceiveService.saveSysMessageReceive(msgCallbackBean);
         // 保存日志信息
-        sysMessageLogService.insertSysMessageLog("上行短信异步反馈",msgCallbackBean.toString());
+        sysMessageLogService.insertSysMessageLog("上行短信异步反馈",visiCallbac);
     }
 }
