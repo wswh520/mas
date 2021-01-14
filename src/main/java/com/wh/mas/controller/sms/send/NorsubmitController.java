@@ -47,7 +47,7 @@ public class NorsubmitController extends HttpServlet {
 
 //    private static String sign = "wHwvfNuH5";//签名编码。在云MAS平台『管理』→『接口管理』→『短信接入用户管理』获取。
     private static String sign = "gecFQ4Ku3";//签名编码。在云MAS平台『管理』→『接口管理』→『短信接入用户管理』获取。
-    private static String secretKey = "Hd@202101";//用户密码
+    private static String secretKey = "Hd@20210114";//用户密码
     private static String ecName = "东华工程科技股份有限公司";//企业名称
     private static String apId = "hdkjdx";//接口账号用户名
 
